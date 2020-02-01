@@ -81,16 +81,16 @@ mutual
 -- These are the functions that interface with the database create
 -- handles and execute queries.
 
-{-# IMPORT Database #-}
+{-# FOREIGN GHC import qualified Database #-}
 open import IO.Primitive
 import Foreign.Haskell as Hask
 
 postulate runQuery : String → IO String
 postulate dbDescription : String → IO String
 postulate abort : ∀ {A : Set} → IO A
-{-# COMPILED runQuery Database.runQuery #-}
-{-# COMPILED dbDescription Database.dbDescription #-}
-{-# COMPILED abort (\ _ -> Database.abort) #-}
+{-# COMPILE GHC runQuery = Database.runQuery #-}
+{-# COMPILE GHC dbDescription = Database.dbDescription #-}
+{-# COMPILE GHC abort = (\ _ -> Database.abort) #-}
 
 -- Performs verification of a schema given that the input string
 -- is a description of the database in the expected format.

@@ -4,12 +4,12 @@ open import Data.Bool
 open import Data.BoundedVec hiding (fromList ; _∷_ ; [])
 open import Data.Char hiding (_==_)
 open import Data.Empty using (⊥)
-open import Data.List hiding (_++_)
+open import Data.List hiding (_++_;lookup)
 open import Data.Maybe
 open import Data.Nat
 open import Data.Product
 open import Data.String hiding (toList)
-open import Data.Unit using (Unit)
+open import Data.Unit using (⊤)
 open import Function using (_∘_)
 
 import Data.Nat.Show as NS
@@ -46,7 +46,7 @@ el BOOL     = Bool
 el (STR x)  = BoundedVec Char x
 
 So : Bool → Set
-So true  = Unit
+So true  = ⊤
 So false = ⊥
 
 -- An attribute corresponds to a column in the database.

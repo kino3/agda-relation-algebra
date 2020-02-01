@@ -12,6 +12,7 @@ open import Data.String using (String ; toList ; _++_)
 open import Data.Sum using (_⊎_ ; inj₁ ; inj₂ ; [_,_])
 open import Data.Unit using (⊤ ; tt)
 open import Function using (_∘_ ; const)
+open import Relation.Nullary
 
 open import DataTypes
 
@@ -119,20 +120,20 @@ schemaToDbFormat ((name , type) ∷ xs) = Base NAT >> char '|'
                                       >> eatString ("\"" ++ typeName type ++ "\"") >> char '|'
                                       >> chompRest >> char '\n'
                                       >> schemaToDbFormat xs
-
-isNumber : Char → Bool
-isNumber '0' = true
-isNumber '1' = true
-isNumber '2' = true
-isNumber '3' = true
-isNumber '4' = true
-isNumber '5' = true
-isNumber '6' = true
-isNumber '7' = true
-isNumber '8' = true
-isNumber '9' = true
-isNumber _   = false
-
+{-
+isNumber : Char → Dec Bool
+isNumber '0' = yes true 
+isNumber '1' = yes true
+isNumber '2' = yes true
+isNumber '3' = yes true
+isNumber '4' = yes true
+isNumber '5' = yes true
+isNumber '6' = yes true
+isNumber '7' = yes true
+isNumber '8' = yes true
+isNumber '9' = yes true
+isNumber _   = no {!!}
+-}
 addChar : ℕ → Char → ℕ
 addChar n c = 10 * n + (toNat c ∸ toNat '0')
 
@@ -147,11 +148,11 @@ ParseResult s = Maybe (Σ s (λ x → List Char))
 
 -- Greedily consume numbers in the input stream and
 -- convert the result to a number
-readℕ : List Char → ParseResult ℕ
-readℕ xs with span isNumber xs
+postulate readℕ : List Char → ParseResult ℕ
+{-readℕ xs with span isNumber xs --{!isNumber!} xs --isNumber
 ... | ( [] , zs ) = nothing
 ... | ( ys , zs ) = just (makeℕ ys , zs )
-
+-}
 mutual
 
     readStr : (n : ℕ) → List Char → ParseResult (BoundedVec Char n)
@@ -235,7 +236,7 @@ mutual
 
 -- Map over BoundVectors. This is needed to make some of the parsing
 -- over strings go through.
-mapBV : ∀ {A B n} → (A → B) → BoundedVec A n → BoundedVec B n
+mapBV : ∀ {A B : Set} {n : ℕ} → (A → B) → BoundedVec A n → BoundedVec B n
 mapBV f x with view x
 ... | []v     = ⟨⟩
 ... | y ∷v ys = f y :: mapBV f ys
