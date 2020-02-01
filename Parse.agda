@@ -120,20 +120,23 @@ schemaToDbFormat ((name , type) ∷ xs) = Base NAT >> char '|'
                                       >> eatString ("\"" ++ typeName type ++ "\"") >> char '|'
                                       >> chompRest >> char '\n'
                                       >> schemaToDbFormat xs
-{-
-isNumber : Char → Dec Bool
-isNumber '0' = yes true 
-isNumber '1' = yes true
-isNumber '2' = yes true
-isNumber '3' = yes true
-isNumber '4' = yes true
-isNumber '5' = yes true
-isNumber '6' = yes true
-isNumber '7' = yes true
-isNumber '8' = yes true
-isNumber '9' = yes true
-isNumber _   = no {!!}
--}
+
+isNumber : Char → Bool
+isNumber '0' = true
+isNumber '1' = true
+isNumber '2' = true
+isNumber '3' = true
+isNumber '4' = true
+isNumber '5' = true
+isNumber '6' = true
+isNumber '7' = true
+isNumber '8' = true
+isNumber '9' = true
+isNumber _   = false
+
+isNumber2 : Char → Dec (Char → Bool)
+isNumber2 = {!!}
+
 addChar : ℕ → Char → ℕ
 addChar n c = 10 * n + (toNat c ∸ toNat '0')
 
@@ -148,11 +151,11 @@ ParseResult s = Maybe (Σ s (λ x → List Char))
 
 -- Greedily consume numbers in the input stream and
 -- convert the result to a number
-postulate readℕ : List Char → ParseResult ℕ
-{-readℕ xs with span isNumber xs --{!isNumber!} xs --isNumber
+readℕ : List Char → ParseResult ℕ
+readℕ xs with span isNumber2 xs
 ... | ( [] , zs ) = nothing
 ... | ( ys , zs ) = just (makeℕ ys , zs )
--}
+
 mutual
 
     readStr : (n : ℕ) → List Char → ParseResult (BoundedVec Char n)
