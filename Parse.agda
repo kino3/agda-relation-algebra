@@ -2,10 +2,10 @@ module Parse where
 
 open import Data.Bool
 open import Data.BoundedVec hiding (toList) renaming ([] to ⟨⟩ ; _∷_ to _::_)
-open import Data.Char using (Char ; _==_ ; toNat)
+open import Data.Char using (Char ; _==_ ; toℕ)
 open import Data.Empty
 open import Data.List using (any ; List ; foldl ; foldr ; span ; length ; _∷_ ; [])
-open import Data.Maybe
+open import Data.Maybe hiding (_>>=_)
 open import Data.Nat
 open import Data.Product
 open import Data.String using (String ; toList ; _++_)
@@ -134,11 +134,12 @@ isNumber '8' = true
 isNumber '9' = true
 isNumber _   = false
 
-isNumber2 : Char → Dec (Char → Bool)
-isNumber2 = {!!}
+postulate isNumber2 : Char → Dec (Char → Bool)
+--isNumber2 '0' = yes λ x → {!!}
+--isNumber2 _ = {!!}
 
 addChar : ℕ → Char → ℕ
-addChar n c = 10 * n + (toNat c ∸ toNat '0')
+addChar n c = 10 * n + (toℕ c ∸ toℕ '0')
 
 makeℕ : List Char → ℕ
 makeℕ = foldl addChar 0

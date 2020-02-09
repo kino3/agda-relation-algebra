@@ -4,7 +4,7 @@ open import Data.Bool
 open import Data.Empty
 open import Data.List using (_∷_ ; [] ; List ; length ; foldr ; intersperse ; map)
 open import Data.Nat
-open import Data.String using (_++_ ; toList ; String ; _==_)
+open import Data.String using (_++_ ; toList ; String; _==_)
 open import Data.Unit
 open import Data.BoundedVec hiding (toList) renaming ([] to ⟨⟩ ; _∷_ to _::_)
 open import Function using (const ; _∘_)
@@ -12,6 +12,7 @@ open import Data.Product hiding (map)
 
 open import DataTypes
 import Parse as P
+
 
 -- Convert a list to a bounded vector of any length ≥ the length
 -- of the given list.
